@@ -21,12 +21,16 @@ public class Question6 { // Flight take-off (Queue)
     }
 
     public static void menuOptions() {
-        System.out.println("Choose one of the options (1-5)\n" +
-                "1. Queue takeoff\n" +
-                "2. Queue landing\n" +
-                "3. Send flight for take-off\n" +
-                "4. View flights\n" +
-                "5. End application");
+        String[] options = new String[5];
+        options[0] = "Queue takeoff";
+        options[1] = "Queue landing";
+        options[2] = "Send flight for take-off";
+        options[3] = "View flights";
+        options[4] = "End application";
+
+        System.out.println("Choose one of the options (1-5)\n");
+        UtilityClass.menuOptions(options);
+
         int choice = UtilityClass.validateRange(1, 5);
 
         menu(choice);

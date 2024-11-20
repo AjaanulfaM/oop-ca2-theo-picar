@@ -49,4 +49,10 @@ public class UtilityClass {
             System.out.println("The queue is empty");
         }
     }
+
+    public static void menuOptions(String[] options) {
+        for(int i = 0; i < options.length; i++) {
+            System.out.println(i+1 + ". " + options[i]);
+        }
+    }
 }
