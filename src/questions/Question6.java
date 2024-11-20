@@ -28,7 +28,7 @@ public class Question6 { // Flight take-off (Queue)
         options[3] = "View flights";
         options[4] = "End application";
 
-        System.out.println("Choose one of the options (1-5)\n");
+        System.out.println("Choose one of the options (1-5)");
         UtilityClass.menuOptions(options);
 
         int choice = UtilityClass.validateRange(1, 5);
