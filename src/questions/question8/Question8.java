@@ -2,14 +2,12 @@ package questions.question8;
 
 import questions.UtilityClass;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class Question8 {
     static Queue<Block> stock = new ArrayDeque<>();
     static Map<String, Queue<Block>> companyStocks = new HashMap<>();
+    static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         System.out.println("STOCK SIMULATOR");
@@ -40,5 +38,31 @@ public class Question8 {
         else {
             System.out.println("Ending session...\nDone. Goodbye");
         }
+    }
+
+    public static void buyStockOption() {
+        String symbol = "";
+        int quantity = 0;
+        double buyPrice = 0.0;
+
+        System.out.println("Enter name of stock company symbol:");
+        symbol = scanner.next();
+
+        System.out.println("Enter the quantity of this stock:");
+        quantity = scanner.nextInt();
+
+        System.out.println("Enter the price of this stock:");
+        buyPrice = scanner.nextDouble();
+    }
+
+    public static void sellStockOption() {
+        String symbol = "";
+        double sell = 0.0;
+
+        System.out.println("Enter the stock company would you like to sell:");
+        symbol = scanner.next();
+
+        System.out.println("Enter you sell amount for this stock:");
+        sell = scanner.nextDouble();
     }
 }
