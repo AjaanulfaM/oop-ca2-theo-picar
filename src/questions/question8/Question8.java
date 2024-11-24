@@ -5,7 +5,6 @@ import questions.UtilityClass;
 import java.util.*;
 
 public class Question8 {
-    static Queue<Block> stock = new ArrayDeque<>();
     static Map<String, Queue<Block>> companyStocks = new HashMap<>();
     static Scanner scanner = new Scanner(System.in);
 
@@ -15,25 +14,25 @@ public class Question8 {
     }
 
     public static void menuOptions() {
-        String[] options = new String[3];
+        String[] options = new String[4];
         options[0] = "Buy stock";
         options[1] = "Sell stock";
-        options[2] = "Quit application";
+        options[2] = "View current stocks";
+        options[3] = "Quit application";
 
-        System.out.println("Please choose one of the following (1-3)");
+        System.out.println("Please choose one of the following (1-4)");
         UtilityClass.menuOptions(options);
 
-        int choice = UtilityClass.validateRange(1, 3);
+        int choice = UtilityClass.validateRange(1, 4);
 
-        menu(choice);
-    }
-
-    public static void menu(int choice) {
         if(choice == 1) {
-            System.out.println("Buy stock");
+            buyStockOption();
         }
         else if(choice == 2) {
             System.out.println("Sell stock");
+        }
+        else if(choice == 3) {
+            System.out.println("View stocks");
         }
         else {
             System.out.println("Ending session...\nDone. Goodbye");
@@ -41,18 +40,26 @@ public class Question8 {
     }
 
     public static void buyStockOption() {
-        String symbol = "";
-        int quantity = 0;
-        double buyPrice = 0.0;
+        Queue<Block> buyStockQueue = new ArrayDeque<>();
+
+        String symbol;
+        int quantity;
+        double buyPrice;
 
         System.out.println("Enter name of stock company symbol:");
         symbol = scanner.next();
 
-        System.out.println("Enter the quantity of this stock:");
+        System.out.println("Enter the shares this stock has:");
         quantity = scanner.nextInt();
 
         System.out.println("Enter the price of this stock:");
         buyPrice = scanner.nextDouble();
+
+        buyStockQueue.add(new Block(quantity, buyPrice));
+        companyStocks.put(symbol, buyStockQueue);
+
+        System.out.println(symbol+ " with " +quantity+ " shares has successfully been bought for €" +buyPrice+ ".\n");
+        menuOptions();
     }
 
     public static void sellStockOption() {
