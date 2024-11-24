@@ -47,18 +47,18 @@ public class Question8 {
         double buyPrice;
 
         System.out.println("Enter name of stock company symbol:");
-        symbol = scanner.next();
+        symbol = UtilityClass.validatePattern("^[A-Z0-9]{3,5}$", "Must only contain uppercase letters, numbers, no more than 5 characters and at least 3 characters");
 
         System.out.println("Enter the shares this stock has:");
-        quantity = scanner.nextInt();
+        quantity = UtilityClass.validateInt();
 
-        System.out.println("Enter the price of this stock:");
-        buyPrice = scanner.nextDouble();
+        System.out.println("Enter the price of this stock (rounded up to 2 decimal places):");
+        buyPrice = UtilityClass.validateDouble(2);
 
         buyStockQueue.add(new Block(quantity, buyPrice));
         companyStocks.put(symbol, buyStockQueue);
 
-        System.out.println(symbol+ " with " +quantity+ " shares has successfully been bought for €" +buyPrice+ ".\n");
+        System.out.println("'" +symbol+ "' with " +quantity+ " shares has successfully been bought for €" +buyPrice+ ".\n");
         menuOptions();
     }
 
