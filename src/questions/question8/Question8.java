@@ -8,6 +8,7 @@ public class Question8 {
     static Map<String, Queue<Block>> companyStocks = new HashMap<>();
     static Scanner scanner = new Scanner(System.in);
     static String symbolPattern = "^[A-Z0-9]{3,5}$";
+    static String errorMessage = "Must only contain uppercase letters, numbers, no more than 5 characters and at least 3 characters";
 
     public static void main(String[] args) {
         System.out.println("STOCK SIMULATOR");
@@ -18,7 +19,7 @@ public class Question8 {
         String[] options = new String[4];
         options[0] = "Buy stock";
         options[1] = "Sell stock";
-        options[2] = "View current stocks";
+        options[2] = "View stock";
         options[3] = "Quit application";
 
         System.out.println("Please choose one of the following (1-4)");
@@ -33,7 +34,7 @@ public class Question8 {
             sellStockOption();
         }
         else if(choice == 3) {
-            System.out.println("View stocks");
+            viewStockOption();
         }
         else {
             System.out.println("Ending session...\nDone. Goodbye");
@@ -46,7 +47,7 @@ public class Question8 {
         double buyPrice;
 
         System.out.println("Enter name of stock company symbol:");
-        symbol = UtilityClass.validatePattern(symbolPattern, "Must only contain uppercase letters, numbers, no more than 5 characters and at least 3 characters");
+        symbol = UtilityClass.validatePattern(symbolPattern, errorMessage);
 
         Queue<Block> buyStockQueue = companyStocks.get(symbol);
         if (buyStockQueue == null) {
@@ -75,7 +76,7 @@ public class Question8 {
         int sellAmount;
 
         System.out.println("Enter the stock company would you like to sell:");
-        symbol = UtilityClass.validatePattern(symbolPattern, "Must only contain uppercase letters, numbers, no more than 5 characters and at least 3 characters");
+        symbol = UtilityClass.validatePattern(symbolPattern, errorMessage);
 
         Queue<Block> sellStockQueue = companyStocks.get(symbol);
 
@@ -97,6 +98,24 @@ public class Question8 {
         blockToSell.sell(sellAmount);
 
         System.out.println("Successfully sold " +sellAmount+ " shares from " +symbol+ ".\n");
+        menuOptions();
+    }
+
+    public static void viewStockOption() {
+        System.out.println("Which stock symbol would you like to see:");
+        String symbol = UtilityClass.validatePattern(symbolPattern, errorMessage);
+
+        Queue<Block> viewStock = companyStocks.get(symbol);
+
+        if(viewStock == null) {
+            System.out.println("You have not bought anything from this symbol. Ending view session...\n");
+            menuOptions();
+        }
+
+        Block blockToShow = viewStock.peek();
+
+        System.out.println(symbol +"\nShares: "+ blockToShow.getQuantity()+ "\nPrice: €" +blockToShow.getPrice() +"\n");
+
         menuOptions();
     }
 }

@@ -1,16 +1,16 @@
 package questions.question8;
 
 public class Block {
-    private double quantity;
+    private int quantity;
     private double price;
 
-    public Block(double quantity, double price) {
+    public Block(int quantity, double price) {
         this.quantity = quantity;
         this.price = price;
     }
 
     // Getters
-    public double getQuantity() {
+    public int getQuantity() {
         return this.quantity;
     }
 
@@ -19,12 +19,12 @@ public class Block {
     }
 
     // Setters
-    public void setQuantity(double quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public void setPrice(double quantity) {
-        this.quantity = quantity;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     // method to remove sellAmount amount in quantity
