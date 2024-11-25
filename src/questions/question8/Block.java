@@ -26,5 +26,10 @@ public class Block {
     public void setPrice(double quantity) {
         this.quantity = quantity;
     }
+
+    // method to remove sellAmount amount in quantity
+    public void sell(int sellAmount) {
+        this.quantity = this.quantity - sellAmount;
+    }
 }
 

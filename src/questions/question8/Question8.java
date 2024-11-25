@@ -7,6 +7,7 @@ import java.util.*;
 public class Question8 {
     static Map<String, Queue<Block>> companyStocks = new HashMap<>();
     static Scanner scanner = new Scanner(System.in);
+    static String symbolPattern = "^[A-Z0-9]{3,5}$";
 
     public static void main(String[] args) {
         System.out.println("STOCK SIMULATOR");
@@ -29,7 +30,7 @@ public class Question8 {
             buyStockOption();
         }
         else if(choice == 2) {
-            System.out.println("Sell stock");
+            sellStockOption();
         }
         else if(choice == 3) {
             System.out.println("View stocks");
@@ -40,14 +41,21 @@ public class Question8 {
     }
 
     public static void buyStockOption() {
-        Queue<Block> buyStockQueue = new ArrayDeque<>();
-
         String symbol;
         int quantity;
         double buyPrice;
 
         System.out.println("Enter name of stock company symbol:");
-        symbol = UtilityClass.validatePattern("^[A-Z0-9]{3,5}$", "Must only contain uppercase letters, numbers, no more than 5 characters and at least 3 characters");
+        symbol = UtilityClass.validatePattern(symbolPattern, "Must only contain uppercase letters, numbers, no more than 5 characters and at least 3 characters");
+
+        Queue<Block> buyStockQueue = companyStocks.get(symbol);
+        if (buyStockQueue == null) {
+            buyStockQueue = new ArrayDeque<>();
+        }
+        else {
+            System.out.println("You have already bought this company. Ending buy session...");
+            menuOptions();
+        }
 
         System.out.println("Enter the shares this stock has:");
         quantity = UtilityClass.validateInt();
@@ -63,13 +71,32 @@ public class Question8 {
     }
 
     public static void sellStockOption() {
-        String symbol = "";
-        double sell = 0.0;
+        String symbol;
+        int sellAmount;
 
         System.out.println("Enter the stock company would you like to sell:");
-        symbol = scanner.next();
+        symbol = UtilityClass.validatePattern(symbolPattern, "Must only contain uppercase letters, numbers, no more than 5 characters and at least 3 characters");
 
-        System.out.println("Enter you sell amount for this stock:");
-        sell = scanner.nextDouble();
+        Queue<Block> sellStockQueue = companyStocks.get(symbol);
+
+        if (sellStockQueue == null) {
+            System.out.println("You have not bought this company yet. Ending sell session...\n");
+            menuOptions();
+        }
+
+        Block blockToSell = sellStockQueue.peek();
+
+        System.out.println("Enter how many shares you want to sell for this stock:");
+        sellAmount = UtilityClass.validateInt();
+
+        if(sellAmount > blockToSell.getQuantity()) {
+            System.out.println("Unsuccessful.Can't sell more shares than you have. Ending sell session...\n");
+            menuOptions();
+        }
+
+        blockToSell.sell(sellAmount);
+
+        System.out.println("Successfully sold " +sellAmount+ " shares from " +symbol+ ".\n");
+        menuOptions();
     }
 }
