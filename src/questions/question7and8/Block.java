@@ -1,4 +1,4 @@
-package questions.question8;
+package questions.question7and8;
 
 public class Block {
     private int quantity;
@@ -25,11 +25,6 @@ public class Block {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    // method to remove sellAmount amount in quantity
-    public void sell(int sellAmount) {
-        this.quantity = this.quantity - sellAmount;
     }
 }
 
