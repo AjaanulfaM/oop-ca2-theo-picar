@@ -37,7 +37,7 @@ public class Question8 {
             viewStockOption();
         }
         else {
-            System.out.println("Ending session...\nDone. Goodbye");
+            System.out.println("Ending session...\nDone. Goodbye!");
         }
     }
 
