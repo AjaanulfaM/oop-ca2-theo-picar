@@ -10,11 +10,13 @@ package questions.question7and8;
 
 import questions.UtilityClass;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Question7 {
 
     static Scanner scanner = new Scanner(System.in);
+
+    static Queue<Block> boughtShares = new ArrayDeque<>();
 
     public static void main(String[] args) {
         System.out.println("STOCK SIMULATOR");
@@ -22,13 +24,14 @@ public class Question7 {
     }
 
     public static void menuOptions() {
-        String[] options = new String[3];
+        String[] options = new String[4];
         options[0] = "Buy shares";
         options[1] = "Sell shares";
-        options[2] = "Quit application";
+        options[2] = "View shares";
+        options[3] = "Quit application";
 
         UtilityClass.menuOptions(options);
-        int choice = UtilityClass.validateRange(1, 3);
+        int choice = UtilityClass.validateRange(1,4);
 
         if(choice == 1) {
             buyMenu();
@@ -36,13 +39,24 @@ public class Question7 {
         else if(choice == 2) {
             sellMenu();
         }
+        else if(choice == 3) {
+            // view shares...
+        }
         else {
             System.out.println("Ending session...\nDone! Goodbye.");
         }
     }
 
     public static void buyMenu() {
-        System.out.println("Buy menu...");
+        System.out.println("Enter amount of shares you would like to buy below:");
+        int shares = UtilityClass.validateInt();
+
+        System.out.println("Enter the price for these shares (rounded up):");
+        int price = UtilityClass.validateInt();
+
+        boughtShares.add(new Block(shares, price));
+
+        System.out.println(shares+ " shares successfully bought for €" +price+ "! Returning to main menu...\n");
         menuOptions();
     }
 
