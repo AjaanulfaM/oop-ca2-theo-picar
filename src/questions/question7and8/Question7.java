@@ -49,19 +49,45 @@ public class Question7 {
 
     public static void buyMenu() {
         System.out.println("Enter amount of shares you would like to buy below:");
-        int shares = UtilityClass.validateInt();
+        int sharesToBuy = UtilityClass.validateInt();
 
         System.out.println("Enter the price for these shares (rounded up):");
-        int price = UtilityClass.validateInt();
+        int buyPrice = UtilityClass.validateInt();
 
-        boughtShares.add(new Block(shares, price));
+        // add the new block to the queue with the given shares and price
+        boughtShares.add(new Block(sharesToBuy, buyPrice));
 
-        System.out.println(shares+ " shares successfully bought for €" +price+ "! Returning to main menu...\n");
+        System.out.println(sharesToBuy+ " shares successfully bought for €" +buyPrice+ "! Returning to main menu...\n");
         menuOptions();
     }
 
     public static void sellMenu() {
-        System.out.println("Sell menu...");
+        System.out.println("Enter amount of shares you would like to sell below:");
+        int sharesToSell = UtilityClass.validateInt();
+
+        System.out.println("Enter the sell price for these shares (rounded up):");
+        int sellPrice = UtilityClass.validateInt();
+
+        int gain = 0;
+        while(sharesToSell > 0 && !boughtShares.isEmpty()) {
+            Block currentBlock = boughtShares.peek();
+            int sharesInCurrentBlock = currentBlock.getQuantity();
+
+            // if sharesToSell < sharesInCurrentBlock, sell that. Otherwise, sell amount will be sharesInCurrentBlock
+            int availableSharesToSell = Math.min(sharesToSell, sharesInCurrentBlock);
+
+            gain += (sellPrice - currentBlock.getPrice()) * sharesToSell;
+
+            currentBlock.sellShares(availableSharesToSell);
+            sharesToSell -= availableSharesToSell;
+
+            if(currentBlock.getQuantity() == 0) {
+                boughtShares.remove();
+            }
+        }
+
+        System.out.println("Gained total of €" + gain + " from shares. Returning to main menu...\n");
+
         menuOptions();
     }
 }
