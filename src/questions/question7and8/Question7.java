@@ -14,8 +14,6 @@ import java.util.*;
 
 public class Question7 {
 
-    static Scanner scanner = new Scanner(System.in);
-
     static Queue<Block> boughtShares = new ArrayDeque<>();
 
     public static void main(String[] args) {
@@ -109,9 +107,13 @@ public class Question7 {
     }
 
     public static void displayAllBlocks() {
+
         if(!boughtShares.isEmpty()) {
+            int blockID = 0;
+            
             for (Block block : boughtShares) {
-                System.out.println("|| " + block.getQuantity() + " shares for €" + block.getPrice() + " ||");
+                blockID++;
+                System.out.println("Block " +blockID+ ":\n|| " + block.getQuantity() + " shares for €" + block.getPrice() + " ||");
             }
         }
         else {
