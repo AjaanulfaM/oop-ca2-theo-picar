@@ -27,8 +27,9 @@ public class Block {
         this.price = price;
     }
 
+    // method to reduce the quantity directly on the block
     public void sellShares(int amount) {
-        if (amount < this.quantity) {
+        if (amount <= this.quantity) {
             this.quantity -= amount;
         }
         else {
