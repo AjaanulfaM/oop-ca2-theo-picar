@@ -40,7 +40,7 @@ public class Question7 {
             sellMenu();
         }
         else if(choice == 3) {
-            // view shares...
+            displayAllBlocks();
         }
         else {
             System.out.println("Ending session...\nDone! Goodbye.");
@@ -64,30 +64,61 @@ public class Question7 {
     public static void sellMenu() {
         System.out.println("Enter amount of shares you would like to sell below:");
         int sharesToSell = UtilityClass.validateInt();
+        // look at while loop to see what this is for
+        int copyOfSharesToSell = sharesToSell;
 
         System.out.println("Enter the sell price for these shares (rounded up):");
         int sellPrice = UtilityClass.validateInt();
 
-        int gain = 0;
+        int gain = 0, blocksSoldOut = 0;
         while(sharesToSell > 0 && !boughtShares.isEmpty()) {
             Block currentBlock = boughtShares.peek();
             int sharesInCurrentBlock = currentBlock.getQuantity();
 
+            // will not continue with selling rest of sharesToSell if quantity of currentBlock is less than shares left to sell (sharesToSell)
+            if(boughtShares.size() == 1 && currentBlock.getQuantity() < sharesToSell) {
+                System.out.println("Cannot sell remaining " +sharesToSell+ " share(s) but managed to sell " +(copyOfSharesToSell - sharesToSell)+ " shares.");
+                break;
+            }
+
             // if sharesToSell < sharesInCurrentBlock, sell that. Otherwise, sell amount will be sharesInCurrentBlock
             int availableSharesToSell = Math.min(sharesToSell, sharesInCurrentBlock);
 
-            gain += (sellPrice - currentBlock.getPrice()) * sharesToSell;
+            gain += (sellPrice - currentBlock.getPrice()) * availableSharesToSell;
 
+            // reduce the quantity of chosen block within Block class
             currentBlock.sellShares(availableSharesToSell);
+            // reduce the share by the amount the user is able to sell for the current block
             sharesToSell -= availableSharesToSell;
 
+            // remove the currentBlock if its share count is now 0
             if(currentBlock.getQuantity() == 0) {
                 boughtShares.remove();
+                blocksSoldOut++;
             }
         }
 
-        System.out.println("Gained total of €" + gain + " from shares. Returning to main menu...\n");
+        if(gain > 0) {
+            System.out.println("Gained total of €" + gain + " from shares and have fully sold out " +blocksSoldOut+ " block(s). Returning to main menu...\n");
+        }
+        else {
+            System.out.println("No profit gained from selling these stocks and have fully sold out " +blocksSoldOut+ " block(s). Returning to main menu...\n");
+        }
 
+        menuOptions();
+    }
+
+    public static void displayAllBlocks() {
+        if(!boughtShares.isEmpty()) {
+            for (Block block : boughtShares) {
+                System.out.println("|| " + block.getQuantity() + " shares for €" + block.getPrice() + " ||");
+            }
+        }
+        else {
+            System.out.println("No stocks have been bought yet or all stocks sold!");
+        }
+
+        System.out.println();
         menuOptions();
     }
 }
