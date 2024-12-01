@@ -2,9 +2,9 @@ package questions.question7and8;
 
 public class Block {
     private int quantity;
-    private double price;
+    private int price;
 
-    public Block(int quantity, double price) {
+    public Block(int quantity, int price) {
         this.quantity = quantity;
         this.price = price;
     }
@@ -14,7 +14,7 @@ public class Block {
         return this.quantity;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return this.price;
     }
 
@@ -23,7 +23,7 @@ public class Block {
         this.quantity = quantity;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 }
