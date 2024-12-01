@@ -26,5 +26,14 @@ public class Block {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    public void sellShares(int amount) {
+        if (amount < this.quantity) {
+            this.quantity -= amount;
+        }
+        else {
+            System.out.println("Cannot sell remaining shares!");
+        }
+    }
 }
 
