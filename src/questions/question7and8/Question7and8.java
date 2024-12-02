@@ -12,8 +12,11 @@ import questions.UtilityClass;
 
 import java.util.*;
 
-public class Question7 {
+public class Question7and8 {
 
+    static Scanner scanner = new Scanner(System.in);
+
+    static Map<String, Queue<Block>> companyShares = new HashMap<>();
     static Queue<Block> boughtShares = new ArrayDeque<>();
 
     public static void main(String[] args) {
@@ -46,6 +49,9 @@ public class Question7 {
     }
 
     public static void buyMenu() {
+        System.out.println("Enter the company that you would like to buy shares from:");
+        String company = scanner.next();
+
         System.out.println("Enter amount of shares you would like to buy below:");
         int sharesToBuy = UtilityClass.validateInt();
 
@@ -54,21 +60,52 @@ public class Question7 {
 
         // add the new block to the queue with the given shares and price
         boughtShares.add(new Block(sharesToBuy, buyPrice));
+        
+        companyShares.put(company, boughtShares);
 
         System.out.println(sharesToBuy+ " shares successfully bought for €" +buyPrice+ "! Returning to main menu...\n");
         menuOptions();
     }
 
     public static void sellMenu() {
+        if(boughtShares.isEmpty()) {
+            System.out.println("You have not bought any shares yet! Returning to main menu...\n");
+            menuOptions();
+        }
+
         System.out.println("Enter amount of shares you would like to sell below:");
         int sharesToSell = UtilityClass.validateInt();
-        // look at while loop to see what this is for
-        int copyOfSharesToSell = sharesToSell;
 
         System.out.println("Enter the sell price for these shares (rounded up):");
         int sellPrice = UtilityClass.validateInt();
 
         int gain = 0, blocksSoldOut = 0;
+        sellSharesFromBlocks(sharesToSell, gain, sellPrice, blocksSoldOut);
+
+        menuOptions();
+    }
+
+    public static void displayAllBlocks() {
+        System.out.println("All bought shares:");
+        if(!boughtShares.isEmpty()) {
+            int blockID = 0;
+
+            for (Block block : boughtShares) {
+                blockID++;
+                System.out.println("Block " +blockID+ ":\n|| " + block.getQuantity() + " shares for €" + block.getPrice() + " ||");
+            }
+        }
+        else {
+            System.out.println("No stocks have been bought yet or all stocks sold!");
+        }
+
+        System.out.println();
+        menuOptions();
+    }
+
+    public static void sellSharesFromBlocks(int sharesToSell, int gain, int sellPrice, int blocksSoldOut) {
+        int copyOfSharesToSell = sharesToSell;
+
         while(sharesToSell > 0 && !boughtShares.isEmpty()) {
             Block currentBlock = boughtShares.peek();
             int sharesInCurrentBlock = currentBlock.getQuantity();
@@ -102,25 +139,5 @@ public class Question7 {
         else {
             System.out.println("No profit gained from selling these stocks and have fully sold out " +blocksSoldOut+ " block(s). Returning to main menu...\n");
         }
-
-        menuOptions();
-    }
-
-    public static void displayAllBlocks() {
-
-        if(!boughtShares.isEmpty()) {
-            int blockID = 0;
-            
-            for (Block block : boughtShares) {
-                blockID++;
-                System.out.println("Block " +blockID+ ":\n|| " + block.getQuantity() + " shares for €" + block.getPrice() + " ||");
-            }
-        }
-        else {
-            System.out.println("No stocks have been bought yet or all stocks sold!");
-        }
-
-        System.out.println();
-        menuOptions();
     }
 }
