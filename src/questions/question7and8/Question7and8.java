@@ -86,13 +86,19 @@ public class Question7and8 {
     }
 
     public static void displayAllBlocks() {
-        System.out.println("All bought shares:");
-        if(!boughtShares.isEmpty()) {
-            int blockID = 0;
+        System.out.println("All bought shares from every company:");
+        if(!companyShares.isEmpty()) {
+            // Map.Entry allows me to be able to print out the maps keys and values by doing companyShares.entrySet()
+            for (Map.Entry<String, Queue<Block>> companyShares : companyShares.entrySet()) {
+                int blockID = 0;
+                String company = companyShares.getKey();
+                Queue<Block> block = companyShares.getValue();
 
-            for (Block block : boughtShares) {
-                blockID++;
-                System.out.println("Block " +blockID+ ":\n|| " + block.getQuantity() + " shares for €" + block.getPrice() + " ||");
+                System.out.println(company);
+                for(Block shares : block) {
+                    blockID++;
+                    System.out.println("Block " +blockID+ " || " +shares.getQuantity()+ " shares for €" +shares.getPrice());
+                }
             }
         }
         else {
