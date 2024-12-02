@@ -17,7 +17,6 @@ public class Question7and8 {
     static Scanner scanner = new Scanner(System.in);
 
     static Map<String, Queue<Block>> companyShares = new HashMap<>();
-    static Queue<Block> boughtShares = new ArrayDeque<>();
 
     public static void main(String[] args) {
         System.out.println("STOCK SIMULATOR");
@@ -49,6 +48,8 @@ public class Question7and8 {
     }
 
     public static void buyMenu() {
+        Queue<Block> boughtShares = new ArrayDeque<>();
+
         System.out.println("Enter the company that you would like to buy shares from:");
         String company = scanner.next();
 
@@ -58,66 +59,79 @@ public class Question7and8 {
         System.out.println("Enter the price for these shares (rounded up):");
         int buyPrice = UtilityClass.validateInt();
 
-        // add the new block to the queue with the given shares and price
-        boughtShares.add(new Block(sharesToBuy, buyPrice));
-        
-        companyShares.put(company, boughtShares);
+        // if the map already has the company, add it to the queue for that company
+        if(companyShares.containsKey(company)) {
+            companyShares.get(company).add(new Block(sharesToBuy, buyPrice));
 
-        System.out.println(sharesToBuy+ " shares successfully bought for €" +buyPrice+ "! Returning to main menu...\n");
+            System.out.println(sharesToBuy+ " new shares successfully added to '" +company+ "' for €" +buyPrice+ "! Returning to main menu...\n");
+        }
+        // otherwise, add the new key (company) to the map and add the new block to the queue
+        else {
+            // add the new block to the queue with the given shares and price
+            boughtShares.add(new Block(sharesToBuy, buyPrice));
+
+            companyShares.put(company, boughtShares);
+
+            System.out.println(sharesToBuy+ " shares successfully bought from '" +company+ "' for €" +buyPrice+ "! Returning to main menu...\n");
+        }
+
         menuOptions();
     }
 
     public static void sellMenu() {
-        if(boughtShares.isEmpty()) {
-            System.out.println("You have not bought any shares yet! Returning to main menu...\n");
+        System.out.println("Enter the company that you would like to sell from:");
+        String company = scanner.next();
+
+        if(!companyShares.containsKey(company)) {
+            System.out.println("You have not bought anything from this company. Returning to main menu...\n");
             menuOptions();
         }
+        else {
+            System.out.println("Enter amount of shares you would like to sell below:");
+            int sharesToSell = UtilityClass.validateInt();
 
-        System.out.println("Enter amount of shares you would like to sell below:");
-        int sharesToSell = UtilityClass.validateInt();
+            System.out.println("Enter the sell price for these shares (rounded up):");
+            int sellPrice = UtilityClass.validateInt();
 
-        System.out.println("Enter the sell price for these shares (rounded up):");
-        int sellPrice = UtilityClass.validateInt();
+            int gain = 0, blocksSoldOut = 0;
+            sellSharesFromBlocks(sharesToSell, gain, sellPrice, blocksSoldOut, company);
 
-        int gain = 0, blocksSoldOut = 0;
-        sellSharesFromBlocks(sharesToSell, gain, sellPrice, blocksSoldOut);
-
-        menuOptions();
+            menuOptions();
+        }
     }
 
     public static void displayAllBlocks() {
-        System.out.println("All bought shares from every company:");
         if(!companyShares.isEmpty()) {
             // Map.Entry allows me to be able to print out the maps keys and values by doing companyShares.entrySet()
             for (Map.Entry<String, Queue<Block>> companyShares : companyShares.entrySet()) {
-                int blockID = 0;
                 String company = companyShares.getKey();
                 Queue<Block> block = companyShares.getValue();
 
-                System.out.println(company);
+                System.out.println("Company: " +company);
                 for(Block shares : block) {
-                    blockID++;
-                    System.out.println("Block " +blockID+ " || " +shares.getQuantity()+ " shares for €" +shares.getPrice());
+                    System.out.println("|| " +shares.getQuantity()+ " shares for €" +shares.getPrice()+ " ||");
                 }
+                System.out.println();
             }
         }
         else {
-            System.out.println("No stocks have been bought yet or all stocks sold!");
+            System.out.println("No stocks have been bought yet or all stocks sold!\n");
         }
 
-        System.out.println();
         menuOptions();
     }
 
-    public static void sellSharesFromBlocks(int sharesToSell, int gain, int sellPrice, int blocksSoldOut) {
+    public static void sellSharesFromBlocks(int sharesToSell, int gain, int sellPrice, int blocksSoldOut, String company) {
         int copyOfSharesToSell = sharesToSell;
+        // to avoid having to write companyShares.get(company) all the time
+        Queue<Block> companyBlockToSell = companyShares.get(company);
 
-        while(sharesToSell > 0 && !boughtShares.isEmpty()) {
-            Block currentBlock = boughtShares.peek();
+        while(sharesToSell > 0 && !companyBlockToSell.isEmpty()) {
+            Block currentBlock = companyBlockToSell.peek();
             int sharesInCurrentBlock = currentBlock.getQuantity();
 
             // will not continue with selling rest of sharesToSell if quantity of currentBlock is less than shares left to sell (sharesToSell)
-            if(boughtShares.size() == 1 && currentBlock.getQuantity() < sharesToSell) {
+            if(companyBlockToSell.size() == 1 && currentBlock.getQuantity() < sharesToSell) {
                 System.out.println("Cannot sell remaining " +sharesToSell+ " share(s) but managed to sell " +(copyOfSharesToSell - sharesToSell)+ " shares.");
                 break;
             }
@@ -134,16 +148,16 @@ public class Question7and8 {
 
             // remove the currentBlock if its share count is now 0
             if(currentBlock.getQuantity() == 0) {
-                boughtShares.remove();
+                companyBlockToSell.remove();
                 blocksSoldOut++;
             }
         }
 
         if(gain > 0) {
-            System.out.println("Gained total of €" + gain + " from shares and have fully sold out " +blocksSoldOut+ " block(s). Returning to main menu...\n");
+            System.out.println("Gained total of €" + gain + " from shares and have fully sold out " +blocksSoldOut+ " block(s) from " +company+ ". Returning to main menu...\n");
         }
         else {
-            System.out.println("No profit gained from selling these stocks and have fully sold out " +blocksSoldOut+ " block(s). Returning to main menu...\n");
+            System.out.println("No profit gained from selling these stocks and have fully sold out " +blocksSoldOut+ " block(s) from " +company+ ". Returning to main menu...\n");
         }
     }
 }
