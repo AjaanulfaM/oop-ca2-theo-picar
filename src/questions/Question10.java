@@ -8,40 +8,44 @@ public class Question10 {
 
     public static void menuOptions() {
         String[] options = {
-                "1. Maze 1 - Easy",
-                "2. Maze 2 - Medium",
-                "3. Maze 3 - Hard",
-                "4. Quit application",
+                "Maze 1 - Easy",
+                "Maze 2 - Medium",
+                "Maze 3 - Hard",
+                "Quit application",
         };
         UtilityClass.menuOptions(options);
 
         System.out.println("Choose one of the above options (1-4)");
         int choice = UtilityClass.validateRange(1, 4);
 
-        if(choice == 1) {
-            mazeLevel1();
-        }
-        else if(choice == 2) {
-            mazeLevel2();
-        }
-        else if(choice == 3) {
-            mazeLevel3();
-        }
-        else {
+        if(choice == 4) {
             System.out.println("Ending session...\nDone! Goodbye.");
         }
+        else {
+            mazeMenu(choice);
+        }
     }
 
-    public static void mazeLevel1() {
+    public static void mazeMenu(int level) {
+        int[][] maze = createMaze(level);
 
-    }
+        for(int i = 0; i < maze.length; i++) {
+            System.out.println();
 
-    public static void mazeLevel2() {
+            for(int j = 0; j < maze.length; j++) {
+                // wall
+                if(maze[i][j] == 0) {
+                    System.out.print("[]");
+                }
+                // path (two spaces so it formats correctly on terminal)
+                else {
+                    System.out.print("  ");
+                }
+            }
+        }
 
-    }
-
-    public static void mazeLevel3() {
-
+        System.out.println("\n");
+        menuOptions();
     }
 
     public static int[][] createMaze(int level) {
@@ -58,12 +62,11 @@ public class Question10 {
             return new int[][] {
                     {0, 0, 1, 0, 0, 0, 0},
                     {0, 0, 1, 0, 0, 0, 0},
-                    {0, 1, 1, 1, 0, 0, 0},
-                    {0, 1, 0, 0, 0, 0, 0},
-                    {0, 1, 1, 1, 0, 0, 0},
-                    {0, 1, 0, 0, 0, 0, 0},
+                    {0, 1, 1, 1, 0, 1, 0},
+                    {0, 1, 0, 0, 0, 1, 0},
+                    {0, 1, 0, 1, 0, 1, 0},
                     {0, 1, 1, 1, 1, 1, 0},
-                    {0, 0, 0, 0, 0, 0, 0}
+                    {0, 0, 0, 0, 0, 0, 0},
             };
         }
         else {
