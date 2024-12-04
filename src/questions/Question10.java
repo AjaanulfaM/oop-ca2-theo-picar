@@ -40,13 +40,13 @@ public class Question10 {
         directions.push(N);
 
         positions.push(new int[]{row, column});
-        directions.push(S);
-
-        positions.push(new int[]{row, column});
         directions.push(W);
 
         positions.push(new int[]{row, column});
         directions.push(E);
+
+        positions.push(new int[]{row, column});
+        directions.push(S);
 
         boolean exitFound = false;
         while(!exitFound) {
@@ -70,7 +70,7 @@ public class Question10 {
                     }
 
                     // checks to see if column is equal to either max or min bound of the array. This means we found exit
-                    if(column == 0 || column == mazePosition[0].length && !done) {
+                    if(column <= 0 || column >= mazePosition[0].length && !done) {
                         System.out.println("Exit found!\n");
                         done = true;
                         exitFound = true;
@@ -87,10 +87,10 @@ public class Question10 {
                     }
                 }
             }
-            if(directionToMove.equals("right")) {
+            else if(directionToMove.equals("right")) {
                 while(!done) {
                     outputMaze(row, column);
-                    // move left until we hit a wall / dead end
+                    // move right until we hit a wall / dead end
                     if(mazePosition[row][column+1] == 0) {
                         done = true;
                     }
@@ -99,7 +99,7 @@ public class Question10 {
                     }
 
                     // checks to see if column is equal to either max or min bound of the array. This means we found exit
-                    if(column == 0 || column == mazePosition[0].length && !done) {
+                    if(column <= 0 || column >= mazePosition[0].length && !done) {
                         System.out.println("Exit found!\n");
                         done = true;
                         exitFound = true;
@@ -111,6 +111,35 @@ public class Question10 {
                         directions.push(W);
                     }
                     if(mazePosition[row+1][column] == 1) {
+                        positions.push(new int[] {row, column});
+                        directions.push(E);
+                    }
+                }
+            }
+            else if(directionToMove.equals("down")) {
+                while(!done) {
+                    outputMaze(row, column);
+                    // move down until we hit a wall / dead end
+                    if(mazePosition[row+1][column] == 0) {
+                        done = true;
+                    }
+                    else {
+                        row++;
+                    }
+
+                    // checks to see if row is equal to either max or min bound of the array. This means we found exit
+                    if(row < 0 || row >= mazePosition.length && !done) {
+                        System.out.println("Exit found!\n");
+                        done = true;
+                        exitFound = true;
+                    }
+
+                    // as we're moving along, check if there are any paths along the way
+                    if(mazePosition[row][column-1] == 1) {
+                        positions.push(new int[] {row, column});
+                        directions.push(W);
+                    }
+                    if(mazePosition[row][column+1] == 1) {
                         positions.push(new int[] {row, column});
                         directions.push(E);
                     }
@@ -162,7 +191,7 @@ public class Question10 {
             }
         }
 
-        System.out.println();
+        System.out.println("\n");
     }
 
 }
