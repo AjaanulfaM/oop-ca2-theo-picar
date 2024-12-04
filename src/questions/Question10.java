@@ -3,10 +3,14 @@ package questions;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+// Bug in code: If an intersection happens to be at end of path, the paths will be checked twice at that intersection
+// Plus have to manually give starting directions and position otherwise code breaks
+
 public class Question10 {
 
     static String N = "up", E = "right", S = "down", W = "left";
     static boolean exitFound = false;
+    static int attempts = 0;
 
     public static void main(String[] args) {
         System.out.println("BACKTRACKING ALGORITHM");
@@ -42,12 +46,15 @@ public class Question10 {
         directions.push(W);
 
         positions.push(new int[]{row, column});
+        directions.push(E);
+
+        positions.push(new int[]{row, column});
         directions.push(N);
 
-        int attempts = 0;
-        while(!exitFound) {
-            attempts++;
+        positions.push(new int[]{row, column});
+        directions.push(S);
 
+        while(!exitFound) {
             // re-assign variables every time a dead end is found
             int[] newRowAndColumn = positions.pop();
             String directionToMove = directions.pop();
@@ -69,8 +76,12 @@ public class Question10 {
     public static void handleLeftRightMovement(String directionToMove, int row, int column, int[][] mazePosition, Deque<int[]> positions, Deque<String> directions) {
         boolean done = false;
 
-        while(!done) {
+        while(!done && !exitFound) {
+            attempts++;
+
+            System.out.println("ATTEMPT #" +attempts);
             outputMaze(row, column);
+
             // moving left
             if(directionToMove.equals("left")) {
                 if(mazePosition[row][column-1] == 0) {
@@ -112,8 +123,12 @@ public class Question10 {
     public static void handleUpDownMovement(String directionToMove, int row, int column, int[][] mazePosition, Deque<int[]> positions, Deque<String> directions) {
         boolean done = false;
 
-        while(!done) {
+        while(!done && !exitFound) {
+            attempts++;
+
+            System.out.println("ATTEMPT #" +attempts);
             outputMaze(row, column);
+
             // moving up
             if(directionToMove.equals("up")) {
                 if(mazePosition[row-1][column] == 0) {
@@ -155,7 +170,7 @@ public class Question10 {
     public static int[][] createMaze() {
         return new int[][] {
                 {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 1, 1, 0, 0, 1, 1, 0},
+                {0, 1, 1, 1, 1, 1, 1, 0},
                 {0, 0, 0, 0, 1, 0, 0, 0},
                 {1, 1, 1, 1, 1, 1, 1, 0},
                 {0, 0, 0, 0, 1, 0, 0, 0},
