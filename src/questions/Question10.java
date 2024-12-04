@@ -23,12 +23,6 @@ public class Question10 {
         if(choice == 1) {
             mazeMenu();
         }
-        else if(choice == 2){
-            outputMaze();
-
-            System.out.println("\n");
-            menuOptions();
-        }
         else {
             System.out.println("Ending session...\nDone! Goodbye.");
         }
@@ -43,16 +37,16 @@ public class Question10 {
 
         // Push all possible paths from the starting position [3][4]
         positions.push(new int[]{row, column});
-        directions.push(W);
+        directions.push(N);
 
         positions.push(new int[]{row, column});
         directions.push(S);
 
         positions.push(new int[]{row, column});
-        directions.push(E);
+        directions.push(W);
 
         positions.push(new int[]{row, column});
-        directions.push(N);
+        directions.push(E);
 
         boolean exitFound = false;
         while(!exitFound) {
@@ -64,8 +58,9 @@ public class Question10 {
             column = newRowAndColumn[1];
 
             boolean done = false;
-            if (directionToMove.equals("left")) {
+            if(directionToMove.equals("left")) {
                 while(!done) {
+                    outputMaze(row, column);
                     // move left until we hit a wall / dead end
                     if(mazePosition[row][column-1] == 0) {
                         done = true;
@@ -75,8 +70,37 @@ public class Question10 {
                     }
 
                     // checks to see if column is equal to either max or min bound of the array. This means we found exit
-                    if(column == 0 || column == mazePosition[0].length) {
-                        System.out.println("Exit found!");
+                    if(column == 0 || column == mazePosition[0].length && !done) {
+                        System.out.println("Exit found!\n");
+                        done = true;
+                        exitFound = true;
+                    }
+
+                    // as we're moving along, check if there are any paths along the way
+                    if(mazePosition[row-1][column] == 1) {
+                        positions.push(new int[] {row, column});
+                        directions.push(W);
+                    }
+                    if(mazePosition[row+1][column] == 1) {
+                        positions.push(new int[] {row, column});
+                        directions.push(E);
+                    }
+                }
+            }
+            if(directionToMove.equals("right")) {
+                while(!done) {
+                    outputMaze(row, column);
+                    // move left until we hit a wall / dead end
+                    if(mazePosition[row][column+1] == 0) {
+                        done = true;
+                    }
+                    else {
+                        column++;
+                    }
+
+                    // checks to see if column is equal to either max or min bound of the array. This means we found exit
+                    if(column == 0 || column == mazePosition[0].length && !done) {
+                        System.out.println("Exit found!\n");
                         done = true;
                         exitFound = true;
                     }
@@ -94,8 +118,6 @@ public class Question10 {
             }
         }
 
-
-        System.out.println("\n");
         menuOptions();
     }
 
@@ -116,7 +138,8 @@ public class Question10 {
         };
     }
 
-    public static void outputMaze() {
+    // parameters act as a way to keep track where the user is moving
+    public static void outputMaze(int startingRow, int startingColumn) {
         int[][] maze = createMaze();
 
         for(int i = 0; i < maze.length; i++) {
@@ -129,7 +152,7 @@ public class Question10 {
                 if(maze[i][j] == 0) {
                     System.out.print("[]");
                 }
-                else if(i == 3 && j == 4) {
+                else if(i == startingRow && j == startingColumn) {
                     System.out.print("<>");
                 }
                 // path (two spaces so it formats correctly on terminal)
@@ -138,6 +161,8 @@ public class Question10 {
                 }
             }
         }
+
+        System.out.println();
     }
 
 }
