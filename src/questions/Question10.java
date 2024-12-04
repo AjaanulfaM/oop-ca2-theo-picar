@@ -56,6 +56,7 @@ public class Question10 {
 
         boolean exitFound = false;
         while(!exitFound) {
+            // re-assign variables every time a dead end is found
             int[] newRowAndColumn = positions.pop();
             String directionToMove = directions.pop();
 
@@ -63,22 +64,29 @@ public class Question10 {
             column = newRowAndColumn[1];
 
             boolean done = false;
-            if (directionToMove.equals("up")) {
+            if (directionToMove.equals("left")) {
                 while(!done) {
-                    // move up until we hit a wall / dead end
-                    if(mazePosition[row-1][column] == 0) {
+                    // move left until we hit a wall / dead end
+                    if(mazePosition[row][column-1] == 0) {
                         done = true;
                     }
                     else {
-                        row--;
+                        column--;
+                    }
+
+                    // checks to see if column is equal to either max or min bound of the array. This means we found exit
+                    if(column == 0 || column == mazePosition[0].length) {
+                        System.out.println("Exit found!");
+                        done = true;
+                        exitFound = true;
                     }
 
                     // as we're moving along, check if there are any paths along the way
-                    if(mazePosition[row][column-1] == 1) {
+                    if(mazePosition[row-1][column] == 1) {
                         positions.push(new int[] {row, column});
                         directions.push(W);
                     }
-                    if(mazePosition[row][column+1] == 1) {
+                    if(mazePosition[row+1][column] == 1) {
                         positions.push(new int[] {row, column});
                         directions.push(E);
                     }
