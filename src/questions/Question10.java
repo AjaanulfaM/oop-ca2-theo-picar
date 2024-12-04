@@ -37,13 +37,13 @@ public class Question10 {
     public static void mazeMenu() {
         Deque<int[]> position = new ArrayDeque<>();
         Deque<String> direction = new ArrayDeque<>();
-        int row = 3;
-        int column = 4;
+        int row = 3, column = 4;
+        int[][] mazePosition = createMaze();
 
         // Manually give starting position in maze and push it to stack
         position.push(new int[]{row, column});
 
-        // Push all possible paths from the starting position
+        // Push all possible paths from the starting position. (North, East, South, West)
         String N = "up", E = "right", S = "down", W = "left";
         direction.push(N);
         direction.push(E);
@@ -52,17 +52,83 @@ public class Question10 {
 
         boolean exitFound = false;
         while(!exitFound) {
+            boolean done = false;
+
             if(direction.pop().equals("up")) {
-                row--;
+                while(!done) {
+                    row--;
+
+                    if(mazePosition[row][column] == 0) {
+                        done = true;
+                    }
+                    // check if there is a left path on current position
+                    if(mazePosition[row][column - 1] == 1) {
+                        position.push(new int[]{row, column});
+                        direction.push(W);
+                    }
+                    // check if there is a right path on current position
+                    if(mazePosition[row][column + 1] == 1) {
+                        position.push(new int[]{row, column});
+                        direction.push(E);
+                    }
+                }
             }
             else if(direction.pop().equals("right")) {
-                column++;
+                while(!done) {
+                    column++;
+
+                    if(mazePosition[row][column] == 0) {
+                        done = true;
+                    }
+                    // check if there is an up path on current position
+                    if(mazePosition[row - 1][column] == 1) {
+                        position.push(new int[]{row, column});
+                        direction.push(N);
+                    }
+                    // check if there is a down path on current position
+                    if(mazePosition[row + 1][column] == 1) {
+                        position.push(new int[]{row, column});
+                        direction.push(E);
+                    }
+                }
             }
             else if(direction.pop().equals("down")) {
-                row++;
+                while(!done) {
+                    row++;
+
+                    if(mazePosition[row][column] == 0) {
+                        done = true;
+                    }
+                    // check if there is a left path on current position
+                    if(mazePosition[row][column - 1] == 1) {
+                        position.push(new int[]{row, column});
+                        direction.push(W);
+                    }
+                    // check if there is a right path on current position
+                    if(mazePosition[row][column + 1] == 1) {
+                        position.push(new int[]{row, column});
+                        direction.push(E);
+                    }
+                }
             }
             else {
-                column--;
+                while(!done) {
+                    column--;
+
+                    if(mazePosition[row][column] == 0) {
+                        done = true;
+                    }
+                    // check if there is an up path on current position
+                    if(mazePosition[row - 1][column] == 1) {
+                        position.push(new int[]{row, column});
+                        direction.push(N);
+                    }
+                    // check if there is a down path on current position
+                    if(mazePosition[row + 1][column] == 1) {
+                        position.push(new int[]{row, column});
+                        direction.push(E);
+                    }
+                }
             }
         }
 
