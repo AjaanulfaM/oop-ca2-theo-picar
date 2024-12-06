@@ -1,1 +1,1 @@
-IMPORTANT: Final version of all questions in the file will be in the group repository sent to Moodle
+IMPORTANT: Final version of all questions in the file will be in the group repository sent to Moodle. The questions here are like 95% done. They are cleaned up and refractored directly in the group repository
