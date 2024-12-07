@@ -105,6 +105,7 @@ public class Question10 {
             if(directionToMove.equals("left")) {
                 if(mazePosition[row][column-1] == 0) {
                     done = true;
+                    break;
                 }
                 else {
                     column--;
